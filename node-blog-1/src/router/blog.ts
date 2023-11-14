@@ -9,10 +9,9 @@ const blogPostMapList = [
 ]
 
 
-const handleBlogRouter = (request, response) => {
+const handleBlogRouter = (request: any, response) => {
   const { method, url } = request;
   const path = url.split('?')[0];
-  console.log('path', path);
 
 
   switch (method) {
