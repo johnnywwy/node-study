@@ -1,3 +1,6 @@
+import { IncomingMessage, ServerResponse } from 'http';
+
+
 const blogGetMapList = [
   { url: '/api/blog/list', msg: '博客列表接口' },
   { url: '/api/blog/detail', msg: '博客详情接口' }
@@ -9,9 +12,9 @@ const blogPostMapList = [
 ]
 
 
-const handleBlogRouter = (request: any, response) => {
+const handleBlogRouter = (request: IncomingMessage, response: ServerResponse) => {
   const { method, url } = request;
-  const path = url.split('?')[0];
+  const path = url?.split('?')[0];
 
 
   switch (method) {

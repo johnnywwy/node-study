@@ -1,11 +1,14 @@
-const userPostMapList = [
-  { url: '/api/user/login', msg: '用户登录' },
+import { mapList } from '../types';
+import { IncomingMessage, ServerResponse } from 'http';
+
+const userPostMapList: mapList[] = [
+  { url: '/api/user/login', msg: 'login success' },
 ]
 
 
-const handleUserRouter = (request, response) => {
+const handleUserRouter = (request: IncomingMessage, response: ServerResponse) => {
   const { method, url } = request;
-  const path = url.split('?')[0];
+  const path = url?.split('?')[0];
 
   switch (method) {
     case 'GET': {
