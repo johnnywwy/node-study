@@ -1,10 +1,12 @@
 import { IncomingMessage, ServerResponse } from 'http';
 
-
+// 博客get接口
 const blogGetMapList = [
   { url: '/api/blog/list', msg: '博客列表接口' },
   { url: '/api/blog/detail', msg: '博客详情接口' }
 ]
+
+// 博客post接口
 const blogPostMapList = [
   { url: '/api/blog/new', msg: '新建博客接口' },
   { url: '/api/blog/update', msg: '更新博客接口' },

@@ -1,10 +1,13 @@
+import { IncomingMessage, ServerResponse } from 'http';
 
 const handleBlogRouter = require('./src/router/blog.ts')
 const handleUserRouter = require('./src/router/user.ts')
 
-const serverHandle = (req, res) => {
+const serverHandle = (req: IncomingMessage, res: ServerResponse) => {
     res.setHeader('Content-Type', 'application/json')
 
+    const { url } = req
+    const path = url?.split('?')[0]
     // 处理 blog 路由
     const blogData = handleBlogRouter(req, res)
     if (blogData) {

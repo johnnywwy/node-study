@@ -1,6 +1,7 @@
 import { mapList } from '../types';
 import { IncomingMessage, ServerResponse } from 'http';
 
+// 用户get接口
 const userPostMapList: mapList[] = [
   { url: '/api/user/login', msg: 'login success' },
 ]
