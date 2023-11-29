@@ -1,5 +1,5 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { getList, getDetail } from '../controller/blog'
+import { getList, getDetail, newBlog, updateBlog, deleteBlog } from '../controller/blog'
 import { SuccessModel, ErrorModel } from '../model/responseModel'
 // 博客get接口
 const blogGetMapList = [
@@ -19,19 +19,20 @@ const handleBlogRouter = (request: IncomingMessage, response: ServerResponse) =>
   const { method, url } = request;
   const path = url?.split('?')[0];
 
+  // 获取id
+  const id = (request as any).query.id;
 
   switch (method) {
     case 'GET': {
-      if (path === blogGetMapList[0].url) {
+      if (path === '/api/blog/list') {
         const author = (request as any).query.author || '';
         const keyword = (request as any).query.keyword || '';
-        const listData = getList(author, keyword);
-        return new SuccessModel(listData);
+        const data = getList(author, keyword);
+        return new SuccessModel(data);
       }
-      if (path === blogGetMapList[1].url) {
-        const id = (request as any).query.id || '';
-        const listData = getDetail(id);
-        return new SuccessModel(listData);
+      if (path === '/api/blog/detail') {
+        const data = getDetail(id);
+        return new SuccessModel(data);
       }
       // for (let i = 0; i < blogGetMapList.length; i++) {
       //   const item = blogGetMapList[i];
@@ -42,10 +43,25 @@ const handleBlogRouter = (request: IncomingMessage, response: ServerResponse) =>
     }
 
     case 'POST': {
-      for (let i = 0; i < blogPostMapList.length; i++) {
-        const item = blogPostMapList[i];
-        if (path === item.url) {
-          return { msg: item.msg }
+
+      if (path === '/api/blog/new') {
+        const blogData = (request as any).body
+        const data = newBlog(blogData);
+        return new SuccessModel(data);
+      }
+
+      if (path === '/api/blog/update') {
+        const blogData = (request as any).body
+        const data = updateBlog(id, blogData);
+        return new SuccessModel(data);
+      }
+
+      if (path === '/api/blog/delete') {
+        const data = deleteBlog(id);
+        if (data) {
+          return new SuccessModel(data);
+        } else {
+          return new ErrorModel('删除失败');
         }
       }
     }
