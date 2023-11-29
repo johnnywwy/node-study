@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    // 其他选项...
+  },
+  // 其他配置...
+}

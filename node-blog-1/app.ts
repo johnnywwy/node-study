@@ -3,30 +3,69 @@ import { IncomingMessage, ServerResponse } from 'http';
 const handleBlogRouter = require('./src/router/blog.ts')
 const handleUserRouter = require('./src/router/user.ts')
 
+const getPostRequestData = (req: IncomingMessage, res?: ServerResponse) => {
+    const promise = new Promise((resolve, reject) => {
+        if (req.method !== 'POST') {
+            resolve({})
+            return
+        }
+
+        if (req.headers['content-type'] !== 'application/json') {
+            resolve({})
+            return
+        }
+
+        // 数据格式
+        let postData = '';
+        req.on('data', (chunk) => {
+            postData += chunk.toString();
+        });
+        req.on('end', () => {
+
+            if (!postData) {
+                resolve({})
+                return
+            }
+            resolve(JSON.parse(postData))
+        });
+
+    })
+
+    return promise
+}
+
+
 const serverHandle = (req: IncomingMessage, res: ServerResponse) => {
     res.setHeader('Content-Type', 'application/json')
 
-    const { url } = req
-    const path = url?.split('?')[0]
-    // 处理 blog 路由
-    const blogData = handleBlogRouter(req, res)
-    if (blogData) {
-        console.log(blogData);
-        res.end(JSON.stringify(blogData))
-        return
-    }
 
-    //处理 user 路由
-    const userData = handleUserRouter(req, res)
-    if (userData) {
-        console.log(userData);
-        res.end(JSON.stringify(userData))
-    }
+    // 处理post data
+    getPostRequestData(req).then(postData => {
+        (req as any).body = postData
 
-    // 未命中路由
-    res.writeHead(404, { 'Content-Type': 'text/plain' })
-    res.end('404 Not Found')
-    res.end()
+        console.log('req', (req as any).body);
+
+        // 处理 blog 路由
+        const blogData = handleBlogRouter(req, res)
+        if (blogData) {
+            console.log(blogData);
+            res.end(JSON.stringify(blogData))
+            return
+        }
+
+        //处理 user 路由
+        const userData = handleUserRouter(req, res)
+        if (userData) {
+            console.log(userData);
+            res.end(JSON.stringify(userData))
+        }
+
+        // 未命中路由
+        res.writeHead(404, { 'Content-Type': 'text/plain' })
+        res.end('404 Not Found')
+        res.end()
+    })
+
 }
 
 module.exports = serverHandle
