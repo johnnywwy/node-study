@@ -1,5 +1,5 @@
 import { IncomingMessage, ServerResponse } from 'http';
-
+import { stringify, parse } from 'querystring';
 const handleBlogRouter = require('./src/router/blog.ts')
 const handleUserRouter = require('./src/router/user.ts')
 
@@ -38,6 +38,10 @@ const getPostRequestData = (req: IncomingMessage, res?: ServerResponse) => {
 const serverHandle = (req: IncomingMessage, res: ServerResponse) => {
     res.setHeader('Content-Type', 'application/json')
 
+    const url = req.url;
+    (req as any).path = url.split('?')[0];
+
+    (req as any).query = parse(url.split('?')[1])
 
     // 处理post data
     getPostRequestData(req).then(postData => {

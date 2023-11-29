@@ -1,5 +1,6 @@
 import { IncomingMessage, ServerResponse } from 'http';
-
+import { getList, getDetail } from '../controller/blog'
+import { SuccessModel, ErrorModel } from '../model/responseModel'
 // 博客get接口
 const blogGetMapList = [
   { url: '/api/blog/list', msg: '博客列表接口' },
@@ -21,12 +22,23 @@ const handleBlogRouter = (request: IncomingMessage, response: ServerResponse) =>
 
   switch (method) {
     case 'GET': {
-      for (let i = 0; i < blogGetMapList.length; i++) {
-        const item = blogGetMapList[i];
-        if (path === item.url) {
-          return { msg: item.msg }
-        }
+      if (path === blogGetMapList[0].url) {
+        const author = (request as any).query.author || '';
+        const keyword = (request as any).query.keyword || '';
+        const listData = getList(author, keyword);
+        return new SuccessModel(listData);
       }
+      if (path === blogGetMapList[1].url) {
+        const id = (request as any).query.id || '';
+        const listData = getDetail(id);
+        return new SuccessModel(listData);
+      }
+      // for (let i = 0; i < blogGetMapList.length; i++) {
+      //   const item = blogGetMapList[i];
+      //   if (path === item.url) {
+      //     return { msg: item.msg }
+      //   }
+      // }
     }
 
     case 'POST': {
