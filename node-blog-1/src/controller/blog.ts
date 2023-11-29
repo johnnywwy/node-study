@@ -35,7 +35,6 @@ export const newBlog = (blogData = {}) => {
   }
 }
 
-
 // 更新博客
 export const updateBlog = (id: string, blogData = {}) => {
   console.log('new Blog Data.........', id);
@@ -44,7 +43,6 @@ export const updateBlog = (id: string, blogData = {}) => {
     id: 6656566656566 // 更新成功后返回的 id
   }
 }
-
 
 // 删除博客
 export const deleteBlog = (id: string) => {
