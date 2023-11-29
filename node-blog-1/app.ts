@@ -15,20 +15,17 @@ const getPostRequestData = (req: IncomingMessage, res?: ServerResponse) => {
             return
         }
 
-        // 数据格式
         let postData = '';
         req.on('data', (chunk) => {
             postData += chunk.toString();
         });
         req.on('end', () => {
-
             if (!postData) {
                 resolve({})
                 return
             }
             resolve(JSON.parse(postData))
         });
-
     })
 
     return promise
@@ -41,6 +38,7 @@ const serverHandle = (req: IncomingMessage, res: ServerResponse) => {
     const url = req.url;
     (req as any).path = url.split('?')[0];
 
+    // 解析 query
     (req as any).query = parse(url.split('?')[1])
 
     // 处理post data
