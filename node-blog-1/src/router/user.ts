@@ -1,5 +1,7 @@
 import { mapList } from '../types';
 import { IncomingMessage, ServerResponse } from 'http';
+import { loginCheck } from '../controller/user';
+import { SuccessModel, ErrorModel } from '../model/responseModel'
 
 // 用户get接口
 const userPostMapList: mapList[] = [
@@ -13,21 +15,19 @@ const handleUserRouter = (request: IncomingMessage, response: ServerResponse) =>
 
   switch (method) {
     case 'GET': {
-      // 表驱动
-      // for (let i = 0; i < getMapList.length; i++) {
-      //   const item = getMapList[i];
-      //   if (path === item.url) {
-      //     return { msg: item.msg }
-      //   }
+      // if (path === '/api/user/login') {
+      //   return { msg: 'login success' }
       // }
     }
 
     case 'POST': {
-      for (let i = 0; i < userPostMapList.length; i++) {
-        const item = userPostMapList[i];
-        if (path === item.url) {
-          return { msg: item.msg }
+      if (path === '/api/user/login') {
+        const { username, password } = (request as any).body;
+        const result = loginCheck(username, password);
+        if (result) {
+          return new SuccessModel()
         }
+        return new ErrorModel('用户名或密码错误');
       }
     }
   }
