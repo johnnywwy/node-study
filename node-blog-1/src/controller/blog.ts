@@ -1,16 +1,31 @@
+import exec from "../db/mysql"
 
 // 获取博客列表
-export const getList = (author?: string, keyword?: string) => {
-  return [
-    {
-      id: 1,
-      title: 'Vue 3.0 发布了',
-      author: '王小虎',
-      date: '2020-04-01',
-      content: 'Vue 3.0 发布了',
-      tag: ['vue', 'javascript']
-    }
-  ]
+export const getList = (author?: string, keyword?: string): Promise<any> => {
+  // return [
+  //   {
+  //     id: 1,
+  //     title: 'Vue 3.0 发布了',
+  //     author: '王小虎',
+  //     date: '2020-04-01',
+  //     content: 'Vue 3.0 发布了',
+  //     tag: ['vue', 'javascript']
+  //   }
+  // ]
+  let sql = `select * from blogs where 1=1 `
+
+  if (author) {
+    sql += `and author = '${author}' `
+  }
+
+  if (keyword) {
+    sql += `and title like '%${keyword}%' `
+  }
+
+  sql += ` order by createtime desc;`
+
+  // 返回 Promise
+  return exec(sql)
 }
 
 // 获取博客详情

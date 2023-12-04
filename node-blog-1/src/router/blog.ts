@@ -27,8 +27,10 @@ const handleBlogRouter = (request: IncomingMessage, response: ServerResponse) =>
       if (path === '/api/blog/list') {
         const author = (request as any).query.author || '';
         const keyword = (request as any).query.keyword || '';
-        const data = getList(author, keyword);
-        return new SuccessModel(data);
+        const result = getList(author, keyword);
+        return result.then(data => {
+          return new SuccessModel(data);
+        })
       }
       if (path === '/api/blog/detail') {
         const data = getDetail(id);

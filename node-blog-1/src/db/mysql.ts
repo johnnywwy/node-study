@@ -1,13 +1,21 @@
-import mysql from 'mysql'
+// import mysql from 'mysql';
+const mysql = require('mysql');
 
-import MYSQL_CONF from '../config/db'
+import MYSQL_CONF from '../config/db';
 console.log('MYSQL_CONF', MYSQL_CONF);
 
 
 // 创建连接对象
-const con = mysql.createConnection(MYSQL_CONF)
+const con = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '123456',
+  port: 3306,
+  database: 'myblog'
+})
 
-// 开始连接
+
+//  连接数据库
 con.connect()
 
 

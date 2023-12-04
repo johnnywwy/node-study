@@ -19,6 +19,7 @@ if (env === 'dev') {
     port: 3306,
     database: 'myblog'
   }
+  console.log('来这里了吗');
 }
 
 if (env === 'pro') {
