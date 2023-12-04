@@ -9,7 +9,28 @@ console.log('env', env);
 // database: 'myblog'
 
 // 配置
-export const MYSQL_CONF = {
-  env
+let MYSQL_CONF = {}
+
+if (env === 'dev') {
+  MYSQL_CONF = {
+    host: 'localhost',
+    user: 'root',
+    password: '123456',
+    port: 3306,
+    database: 'myblog'
+  }
 }
+
+if (env === 'pro') {
+  MYSQL_CONF = {
+    host: 'localhost',
+    user: 'root',
+    password: '123456',
+    port: 3306,
+    database: 'myblog'
+  }
+}
+
+export default MYSQL_CONF;
+
 
