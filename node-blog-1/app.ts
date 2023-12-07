@@ -45,14 +45,14 @@ const serverHandle = (req: IncomingMessage, res: ServerResponse) => {
     getPostRequestData(req).then(postData => {
         (req as any).body = postData
 
-        console.log('req', (req as any).body);
+        console.log('lllllllll', (req as any).body);
 
         // 处理 blog 路由
         const blogResult = handleBlogRouter(req, res)
         if (blogResult) {
             blogResult.then(data => {
                 if (data) {
-                    console.log(data);
+                    console.log('ddddddd', data);
                     res.end(JSON.stringify(data))
                     return
                 }

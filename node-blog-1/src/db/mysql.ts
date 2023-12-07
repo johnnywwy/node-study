@@ -1,4 +1,6 @@
 // import mysql from 'mysql';
+import { RowDataPacket, OkPacket } from 'mysql';
+
 const mysql = require('mysql');
 
 import MYSQL_CONF from '../config/db';
@@ -24,7 +26,10 @@ con.connect()
  * @param {string} sql - SQL语句
  * @returns {Promise} - 返回一个Promise对象，包含执行结果
  */
-function exec(sql: string) {
+
+type ExecResult<T = RowDataPacket[]> = T | OkPacket;
+
+function exec<T = RowDataPacket[]>(sql: string): Promise<ExecResult<T>> {
   return new Promise((resolve, reject) => {
     con.query(sql, (err, result) => {
       if (err) {

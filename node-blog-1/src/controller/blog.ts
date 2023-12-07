@@ -1,17 +1,8 @@
 import exec from "../db/mysql"
+import { blogDataDTO } from "../types"
 
 // 获取博客列表
 export const getList = (author?: string, keyword?: string): Promise<any> => {
-  // return [
-  //   {
-  //     id: 1,
-  //     title: 'Vue 3.0 发布了',
-  //     author: '王小虎',
-  //     date: '2020-04-01',
-  //     content: 'Vue 3.0 发布了',
-  //     tag: ['vue', 'javascript']
-  //   }
-  // ]
   let sql = `select * from blogs where 1=1 `
 
   if (author) {
@@ -22,7 +13,7 @@ export const getList = (author?: string, keyword?: string): Promise<any> => {
     sql += `and title like '%${keyword}%' `
   }
 
-  sql += ` order by createtime desc;`
+  sql += `order by createtime desc;`
 
   // 返回 Promise
   return exec(sql)
@@ -30,28 +21,31 @@ export const getList = (author?: string, keyword?: string): Promise<any> => {
 
 // 获取博客详情
 export const getDetail = (id?: string) => {
-  return [
-    {
-      id: 1,
-      title: '详情啊啊啊啊啊啊啊啊啊啊啊啊',
-      author: '王小虎',
-      date: '2020-04-01',
-      content: '我是详情接口啦啦啦啦',
-      tag: ['vue', 'javascript']
-    }
-  ]
+  const sql = `select * from blogs where id='${id}' `
+  return exec(sql).then(res => {
+    console.log('博客详情', res);
+
+    return res[0]
+  })
 }
 
 // 新增博客
-export const newBlog = (blogData = {}) => {
-  // blogData 是一个对象
-  return {
-    id: 3 // 新增成功后返回的 id
-  }
+export const newBlog = (blogData: blogDataDTO) => {
+  const { title, content, author } = blogData
+  const createTime = Date.now()
+
+  const sql = `
+    insert into blogs (title, content, author, createTime) 
+    values ('${title}', '${content}', '${author}', ${createTime});
+  `
+  return exec(sql).then(res => {
+    console.log('新增博客', res);
+    return res.insertId
+  })
 }
 
 // 更新博客
-export const updateBlog = (id: string, blogData = {}) => {
+export const updateBlog = (id: string, blogData: blogDataDTO) => {
   console.log('new Blog Data.........', id);
 
   return {

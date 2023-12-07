@@ -24,6 +24,7 @@ const handleBlogRouter = (request: IncomingMessage, response: ServerResponse) =>
 
   switch (method) {
     case 'GET': {
+      // 获取博客列表
       if (path === '/api/blog/list') {
         const author = (request as any).query.author || '';
         const keyword = (request as any).query.keyword || '';
@@ -32,9 +33,14 @@ const handleBlogRouter = (request: IncomingMessage, response: ServerResponse) =>
           return new SuccessModel(data);
         })
       }
+
+      // 获取博客详情
       if (path === '/api/blog/detail') {
-        const data = getDetail(id);
-        return new SuccessModel(data);
+        const result = getDetail(id);
+        return result.then(data => {
+          return new SuccessModel(data);
+        })
+
       }
       // for (let i = 0; i < blogGetMapList.length; i++) {
       //   const item = blogGetMapList[i];
@@ -47,9 +53,16 @@ const handleBlogRouter = (request: IncomingMessage, response: ServerResponse) =>
     case 'POST': {
 
       if (path === '/api/blog/new') {
+        // const author = 'zhangsan'; //TODO 假数据，待开发 登录时再改成真实数据
+        // (request as any).body.author = author
         const blogData = (request as any).body
-        const data = newBlog(blogData);
-        return new SuccessModel(data);
+        const result = newBlog(blogData);
+        return result.then((data) => {
+          return new SuccessModel(data);
+
+        })
+        // const data = newBlog(blogData);
+        // return new SuccessModel(data);
       }
 
       if (path === '/api/blog/update') {
