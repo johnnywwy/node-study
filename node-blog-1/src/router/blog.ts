@@ -51,33 +51,40 @@ const handleBlogRouter = (request: IncomingMessage, response: ServerResponse) =>
     }
 
     case 'POST': {
-
+      // 新建博客
       if (path === '/api/blog/new') {
         // const author = 'zhangsan'; //TODO 假数据，待开发 登录时再改成真实数据
-        // (request as any).body.author = author
         const blogData = (request as any).body
         const result = newBlog(blogData);
         return result.then((data) => {
           return new SuccessModel(data);
-
         })
-        // const data = newBlog(blogData);
-        // return new SuccessModel(data);
       }
 
+      // 更新博客
       if (path === '/api/blog/update') {
         const blogData = (request as any).body
-        const data = updateBlog(id, blogData);
-        return new SuccessModel(data);
+        const result = updateBlog(id, blogData);
+        return result.then((data) => {
+          if (data) {
+            return new SuccessModel(data);
+          } else {
+            return new ErrorModel('更新失败');
+          }
+        })
       }
 
+      // 删除博客
       if (path === '/api/blog/delete') {
-        const data = deleteBlog(id);
-        if (data) {
-          return new SuccessModel(data);
-        } else {
-          return new ErrorModel('删除失败');
-        }
+        const author = 'lisi'//TODO 假数据，待开发 登录时再改成真实数据
+        const result = deleteBlog(id, author);
+        return result.then((data) => {
+          if (data) {
+            return new SuccessModel(data);
+          } else {
+            return new ErrorModel('删除失败');
+          }
+        })
       }
     }
   }

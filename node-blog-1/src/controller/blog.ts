@@ -48,10 +48,10 @@ export const newBlog = (blogData: blogDataDTO) => {
 export const updateBlog = (id: string, blogData: blogDataDTO) => {
   console.log('new Blog Data.........', id);
 
-  const { title, content, author } = blogData
+  const { title, content } = blogData
   const sql = `
     update blogs 
-    set title='${title}', content='${content}', author='${author}' 
+    set title='${title}', content='${content}'
     where id='${id}';
   `
 
@@ -65,6 +65,13 @@ export const updateBlog = (id: string, blogData: blogDataDTO) => {
 }
 
 // 删除博客
-export const deleteBlog = (id: string) => {
-  return false
+export const deleteBlog = (id: string, author: string) => {
+  const sql = `delete from blogs where id='${id}' and author='${author}';`
+  return exec(sql).then(res => {
+    console.log('删除成功', res);
+    if (res.affectedRows > 0) {
+      return true
+    }
+    return false
+  })
 }
