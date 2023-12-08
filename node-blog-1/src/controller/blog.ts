@@ -48,9 +48,20 @@ export const newBlog = (blogData: blogDataDTO) => {
 export const updateBlog = (id: string, blogData: blogDataDTO) => {
   console.log('new Blog Data.........', id);
 
-  return {
-    id: 6656566656566 // 更新成功后返回的 id
-  }
+  const { title, content, author } = blogData
+  const sql = `
+    update blogs 
+    set title='${title}', content='${content}', author='${author}' 
+    where id='${id}';
+  `
+
+  return exec(sql).then(res => {
+    console.log('更新结果', res);
+    if (res.affectedRows > 0) {
+      return true
+    }
+    return false
+  })
 }
 
 // 删除博客
