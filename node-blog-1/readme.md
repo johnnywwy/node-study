@@ -46,6 +46,14 @@ create database myblog;
 use myblog;
 ```
 
+#### 查询数据表
+
+```bash
+SHOW TABLES;
+
+```
+
+
 #### 创建表
 
 ```bash
