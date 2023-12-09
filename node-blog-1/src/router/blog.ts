@@ -1,21 +1,21 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import { getList, getDetail, newBlog, updateBlog, deleteBlog } from '../controller/blog'
 import { SuccessModel, ErrorModel } from '../model/responseModel'
-// 博客get接口
-const blogGetMapList = [
-  { url: '/api/blog/list', msg: '博客列表接口' },
-  { url: '/api/blog/detail', msg: '博客详情接口' }
-]
+// // 博客get接口
+// const blogGetMapList = [
+//   { url: '/api/blog/list', msg: '博客列表接口' },
+//   { url: '/api/blog/detail', msg: '博客详情接口' }
+// ]
 
-// 博客post接口
-const blogPostMapList = [
-  { url: '/api/blog/new', msg: '新建博客接口' },
-  { url: '/api/blog/update', msg: '更新博客接口' },
-  { url: '/api/blog/delete', msg: '删除博客接口' }
-]
+// // 博客post接口
+// const blogPostMapList = [
+//   { url: '/api/blog/new', msg: '新建博客接口' },
+//   { url: '/api/blog/update', msg: '更新博客接口' },
+//   { url: '/api/blog/delete', msg: '删除博客接口' }
+// ]
 
 
-const handleBlogRouter = (request: IncomingMessage, response: ServerResponse) => {
+const handleBlogRouter = (request: IncomingMessage, response: ServerResponse): Promise<any> => {
   const { method, url } = request;
   const path = url?.split('?')[0];
 
@@ -40,14 +40,7 @@ const handleBlogRouter = (request: IncomingMessage, response: ServerResponse) =>
         return result.then(data => {
           return new SuccessModel(data);
         })
-
       }
-      // for (let i = 0; i < blogGetMapList.length; i++) {
-      //   const item = blogGetMapList[i];
-      //   if (path === item.url) {
-      //     return { msg: item.msg }
-      //   }
-      // }
     }
 
     case 'POST': {
@@ -76,7 +69,7 @@ const handleBlogRouter = (request: IncomingMessage, response: ServerResponse) =>
 
       // 删除博客
       if (path === '/api/blog/delete') {
-        const author = 'lisi'//TODO 假数据，待开发 登录时再改成真实数据
+        const author = 'lisi' //TODO 假数据，待开发 登录时再改成真实数据
         const result = deleteBlog(id, author);
         return result.then((data) => {
           if (data) {

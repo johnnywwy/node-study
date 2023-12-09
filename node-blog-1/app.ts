@@ -1,5 +1,5 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { stringify, parse } from 'querystring';
+import { parse } from 'querystring';
 const handleBlogRouter = require('./src/router/blog.ts')
 const handleUserRouter = require('./src/router/user.ts')
 
@@ -16,9 +16,11 @@ const getPostRequestData = (req: IncomingMessage, res?: ServerResponse) => {
         }
 
         let postData = '';
+
         req.on('data', (chunk) => {
             postData += chunk.toString();
         });
+
         req.on('end', () => {
             if (!postData) {
                 resolve({})
@@ -45,14 +47,14 @@ const serverHandle = (req: IncomingMessage, res: ServerResponse) => {
     getPostRequestData(req).then(postData => {
         (req as any).body = postData
 
-        console.log('lllllllll', (req as any).body);
+        console.log('处理post data', (req as any).body);
 
         // 处理 blog 路由
         const blogResult = handleBlogRouter(req, res)
         if (blogResult) {
             blogResult.then(data => {
                 if (data) {
-                    console.log('ddddddd', data);
+                    console.log('blog', data);
                     res.end(JSON.stringify(data))
                     return
                 }
@@ -60,18 +62,16 @@ const serverHandle = (req: IncomingMessage, res: ServerResponse) => {
             return
         }
 
-        // const blogData = handleBlogRouter(req, res)
-        // if (blogData) {
-        //     console.log(blogData);
-        //     res.end(JSON.stringify(blogData))
-        //     return
-        // }
-
         //处理 user 路由
-        const userData = handleUserRouter(req, res)
-        if (userData) {
-            console.log(userData);
-            res.end(JSON.stringify(userData))
+        const userResult = handleUserRouter(req, res)
+        if (userResult) {
+            userResult.then(data => {
+                if (data) {
+                    console.log('user', data);
+                    res.end(JSON.stringify(data))
+                }
+            })
+            return
         }
 
         // 未命中路由
@@ -84,4 +84,3 @@ const serverHandle = (req: IncomingMessage, res: ServerResponse) => {
 
 module.exports = serverHandle
 
-// process.env.NODE_ENV

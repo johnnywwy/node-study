@@ -1,7 +1,12 @@
+
+import exec from "../db/mysql"
+
+// 登录校验
 export const loginCheck = (username: string, password: string) => {
-  // 假数据
-  if (username === 'zhangsan' && password === '123456') {
-    return true
-  }
-  return false
+  const sql = `select username,realname from users where username = '${username}' and password = '${password}'`
+
+  return exec(sql).then((result) => {
+    return result[0] || {}
+  })
+
 }
