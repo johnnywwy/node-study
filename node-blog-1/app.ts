@@ -7,7 +7,7 @@ declare module 'http' {
 }
 
 import { IncomingMessage, ServerResponse } from 'http';
-import { stringify, parse } from 'querystring';
+import { parse } from 'querystring';
 
 
 const handleBlogRouter = require('./src/router/blog.ts')
@@ -58,9 +58,8 @@ const serverHandle = (req: IncomingMessage, res: ServerResponse) => {
     const cookieStr = req.headers.cookie || ''
     cookieStr.split(':').forEach((item) => {
         if (!item) return
-        const arr = item.split('=')
-        const [key, value] = item.split('=');
-        (req as any).cookie[key] = value
+        const [key, value] = item.split('=').map(it => it.trim());;
+        req.cookie[key] = value;
     })
 
 
