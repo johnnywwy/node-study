@@ -1,5 +1,15 @@
+declare module 'http' {
+    interface IncomingMessage {
+        cookie: Record<string, string>;
+        path: string;
+        query: Record<string, string | string[]>;
+    }
+}
+
 import { IncomingMessage, ServerResponse } from 'http';
-import { parse } from 'querystring';
+import { stringify, parse } from 'querystring';
+
+
 const handleBlogRouter = require('./src/router/blog.ts')
 const handleUserRouter = require('./src/router/user.ts')
 
@@ -38,10 +48,24 @@ const serverHandle = (req: IncomingMessage, res: ServerResponse) => {
     res.setHeader('Content-Type', 'application/json')
 
     const url = req.url;
-    (req as any).path = url.split('?')[0];
+    req.path = url.split('?')[0];
 
     // 解析 query
-    (req as any).query = parse(url.split('?')[1])
+    req.query = parse(url.split('?')[1]);
+
+    // 解析 cookie
+    req.cookie = {}
+    const cookieStr = req.headers.cookie || ''
+    cookieStr.split(':').forEach((item) => {
+        if (!item) return
+        const arr = item.split('=')
+        const [key, value] = item.split('=');
+        (req as any).cookie[key] = value
+    })
+
+
+    console.log('req.cookie', req.cookie);
+
 
     // 处理post data
     getPostRequestData(req).then(postData => {
