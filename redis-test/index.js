@@ -1,6 +1,9 @@
 import { createClient } from "redis";
 
-const client = createClient();
+const client = createClient({
+  url: 'redis://localhost:6379',
+});
+
 
 client.on("error", (err) => {
   console.error(err);
@@ -12,9 +15,9 @@ client.on("connect", () => {
 
 await client.connect();
 
-await client.set("foo", "bar");
+await client.set("fuck", "6666666");
 
-const value = await client.get("foo");
+const value = await client.get("fuck");
 console.log(value);
 
 client.quit();
