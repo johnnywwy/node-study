@@ -3,8 +3,8 @@ import { RowDataPacket, OkPacket } from 'mysql';
 
 const mysql = require('mysql');
 
-import MYSQL_CONF from '../config/db';
-console.log('MYSQL_CONF', MYSQL_CONF);
+import { MYSQL_CONF, REDIS_CONF } from '../config/db';
+console.log('kank', MYSQL_CONF, REDIS_CONF);
 
 
 // 创建连接对象

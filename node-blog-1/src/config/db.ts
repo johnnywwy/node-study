@@ -1,15 +1,12 @@
 const env = process.env.NODE_ENV;// 环境参数
 
-console.log('env', env);
+console.log('env666', env);
 
-// host: 'localhost',
-// user: 'root',
-// password: '123456',
-// port: 3306,
-// database: 'myblog'
-
-// 配置
+// mysql配置
 let MYSQL_CONF = {}
+
+// redis 配置
+let REDIS_CONF = {}
 
 if (env === 'dev') {
   MYSQL_CONF = {
@@ -19,7 +16,7 @@ if (env === 'dev') {
     port: 3306,
     database: 'myblog'
   }
-  console.log('来这里了吗');
+  REDIS_CONF = 'redis://localhost:6379'
 }
 
 if (env === 'pro') {
@@ -30,8 +27,11 @@ if (env === 'pro') {
     port: 3306,
     database: 'myblog'
   }
+
+  REDIS_CONF = 'redis://localhost:6379'
+
 }
 
-export default MYSQL_CONF;
+export { MYSQL_CONF, REDIS_CONF };
 
 
