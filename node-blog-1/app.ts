@@ -3,6 +3,7 @@ declare module 'http' {
         cookie: Record<string, string>;
         path: string;
         query: Record<string, string | string[]>;
+        session: Record<string, string | string[]>;
     }
 }
 
@@ -43,6 +44,9 @@ const getPostRequestData = (req: IncomingMessage, res?: ServerResponse) => {
     return promise
 }
 
+// session 数据
+const SESSION_DATA: any = {}
+
 
 const serverHandle = (req: IncomingMessage, res: ServerResponse) => {
     res.setHeader('Content-Type', 'application/json')
@@ -63,7 +67,23 @@ const serverHandle = (req: IncomingMessage, res: ServerResponse) => {
     })
 
 
-    console.log('req.cookie', req.cookie);
+    // 解析 session
+    let needSetCookie = false
+    let userId = req.cookie.userid
+    if (userId) {
+        if (!SESSION_DATA[userId]) {
+            SESSION_DATA[userId] = {}
+        }
+    } else {
+        needSetCookie = true
+        userId = `${Date.now()}_${Math.random()} `
+    }
+    req.session = SESSION_DATA[userId]
+
+
+
+
+    console.log('session', req.session);
 
 
     // 处理post data
@@ -76,8 +96,10 @@ const serverHandle = (req: IncomingMessage, res: ServerResponse) => {
         const blogResult = handleBlogRouter(req, res)
         if (blogResult) {
             blogResult.then(data => {
+                if (needSetCookie)
+                    res.setHeader('Set-Cookie', `userid=${userId}; path=/; httpOnly`);
+
                 if (data) {
-                    console.log('blog', data);
                     res.end(JSON.stringify(data))
                     return
                 }
@@ -87,8 +109,11 @@ const serverHandle = (req: IncomingMessage, res: ServerResponse) => {
 
         //处理 user 路由
         const userResult = handleUserRouter(req, res)
+
         if (userResult) {
             userResult.then(data => {
+                if (needSetCookie)
+                    res.setHeader('Set-Cookie', `userid=${userId}; path=/; httpOnly`);
                 if (data) {
                     console.log('user', data);
                     res.end(JSON.stringify(data))

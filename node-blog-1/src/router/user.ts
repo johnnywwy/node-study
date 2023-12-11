@@ -3,6 +3,7 @@ declare module 'http' {
     cookie: Record<string, string>;
     path: string;
     query: Record<string, string | string[]>;
+    session: Record<string, string | string[]>;
   }
 }
 
@@ -16,12 +17,53 @@ const handleUserRouter = (request: IncomingMessage, response: ServerResponse): P
 
   switch (method) {
 
-    case 'POST': {
+    // case 'POST': {
+    //   if (path === '/api/user/login') {
+    //     const { username, password } = (request as any).body;
+    //     const result = login(username, password);
+    //     console.log('result666', result);
+
+
+    //     return result.then(res => {
+    //       console.log('res是什么', res);
+
+    //       if (res.username) {
+    //         request.session.username = res.username;
+    //         request.session.realname = res.realname;
+
+    //         console.log(' request.session is', request.session);
+
+    //         // 操作cookie
+    //         // response.setHeader('Set-Cookie', `username=${res.username}; path=/; httpOnly`);
+    //         return new SuccessModel()
+    //       }
+    //       return new ErrorModel('登录失败！');
+    //     })
+
+    //   }
+    // }
+
+    // 登录验证测试
+    case 'GET': {
+
       if (path === '/api/user/login') {
-        const { username, password } = (request as any).body;
+        console.log('request', request.query);
+        // request.body
+
+        const { username, password } = (request as any).query;
         const result = login(username, password);
+        console.log('result666', result);
+
+
         return result.then(res => {
+          console.log('res是什么', res);
+
           if (res.username) {
+            request.session.username = res.username;
+            request.session.realname = res.realname;
+
+            console.log(' request.session is', request.session);
+
             // 操作cookie
             // response.setHeader('Set-Cookie', `username=${res.username}; path=/; httpOnly`);
             return new SuccessModel()
@@ -30,13 +72,19 @@ const handleUserRouter = (request: IncomingMessage, response: ServerResponse): P
         })
 
       }
-    }
 
-    // 登录验证测试
-    case 'GET': {
       if (path === '/api/user/login-test') {
-        if (request.cookie.username) {
-          return Promise.resolve(new SuccessModel())
+        // if (request.cookie.username) {
+        //   return Promise.resolve(new SuccessModel())
+        // }
+        // return Promise.resolve(new ErrorModel('未登录！'))
+        // request.session
+        console.log('test', request.session);
+
+        if (request.session?.username) {
+          return Promise.resolve(new SuccessModel({
+            username: request.session.username
+          }))
         }
         return Promise.resolve(new ErrorModel('未登录！'))
       }
