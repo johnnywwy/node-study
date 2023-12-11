@@ -4,12 +4,15 @@ declare module 'http' {
     path: string;
     query: Record<string, string | string[]>;
     session: Record<string, string | string[]>;
+    sessionId: string;
   }
 }
 
 import { IncomingMessage, ServerResponse } from 'http';
 import { login } from '../controller/user';
 import { SuccessModel, ErrorModel } from '../model/responseModel'
+import { setRedis } from '../db/redis';
+
 
 const handleUserRouter = (request: IncomingMessage, response: ServerResponse): Promise<any> => {
   const { method, url } = request;
@@ -61,8 +64,10 @@ const handleUserRouter = (request: IncomingMessage, response: ServerResponse): P
           if (res.username) {
             request.session.username = res.username;
             request.session.realname = res.realname;
-
             console.log(' request.session is', request.session);
+
+            // 将session存入redis
+            setRedis(request.sessionId, request.session)
 
             // 操作cookie
             // response.setHeader('Set-Cookie', `username=${res.username}; path=/; httpOnly`);
