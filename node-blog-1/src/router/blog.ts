@@ -14,6 +14,15 @@ import { SuccessModel, ErrorModel } from '../model/responseModel'
 //   { url: '/api/blog/delete', msg: '删除博客接口' }
 // ]
 
+const loginCheck = (req) => {
+  console.log('登录验证', req);
+
+  if (!req.session.username) {
+    return Promise.resolve(
+      new ErrorModel('尚未登录')
+    )
+  }
+}
 
 const handleBlogRouter = (request: IncomingMessage, response: ServerResponse): Promise<any> => {
   const { method, url } = request;
@@ -47,6 +56,13 @@ const handleBlogRouter = (request: IncomingMessage, response: ServerResponse): P
       // 新建博客
       if (path === '/api/blog/new') {
         // const author = 'zhangsan'; //TODO 假数据，待开发 登录时再改成真实数据
+
+        const loginCheckResult = loginCheck(request)
+        if (loginCheckResult) {
+          // 未登录
+          return loginCheckResult
+        }
+
         const blogData = (request as any).body
         const result = newBlog(blogData);
         return result.then((data) => {
