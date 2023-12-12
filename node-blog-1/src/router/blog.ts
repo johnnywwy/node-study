@@ -81,7 +81,7 @@ const handleBlogRouter = (request: IncomingMessage, response: ServerResponse): P
           // 未登录
           return loginCheckResult
         }
-        // (request as any).body.author = (request as any).session.username
+        (request as any).body.author = (request as any).session.username
 
         const blogData = (request as any).body
         const result = newBlog(blogData);
