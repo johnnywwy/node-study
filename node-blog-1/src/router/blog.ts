@@ -15,7 +15,7 @@ import { SuccessModel, ErrorModel } from '../model/responseModel'
 // ]
 
 const loginCheck = (req) => {
-  console.log('登录验证', req);
+  console.log('登录验证');
 
   if (!req.session.username) {
     return Promise.resolve(
