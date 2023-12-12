@@ -15,8 +15,6 @@ import { SuccessModel, ErrorModel } from '../model/responseModel'
 // ]
 
 const loginCheck = (req) => {
-  console.log('登录验证');
-
   if (!req.session.username) {
     return Promise.resolve(
       new ErrorModel('尚未登录')
@@ -35,8 +33,29 @@ const handleBlogRouter = (request: IncomingMessage, response: ServerResponse): P
     case 'GET': {
       // 获取博客列表
       if (path === '/api/blog/list') {
-        const author = (request as any).query.author || '';
+        let author = (request as any).query.author || '';
         const keyword = (request as any).query.keyword || '';
+        const isadmin = (request as any).query.isadmin;
+
+        console.log('isadmin', isadmin);
+
+
+
+
+        if (isadmin) {
+          //管理员界面
+          const loginCheckResult = loginCheck(request)
+          console.log('loginCheckResult', loginCheckResult);
+
+          if (loginCheckResult) {
+            // 未登录
+            return loginCheckResult;
+          }
+          author = (request as any).session.username
+        }
+
+
+
         const result = getList(author, keyword);
         return result.then(data => {
           return new SuccessModel(data);
@@ -62,6 +81,7 @@ const handleBlogRouter = (request: IncomingMessage, response: ServerResponse): P
           // 未登录
           return loginCheckResult
         }
+        // (request as any).body.author = (request as any).session.username
 
         const blogData = (request as any).body
         const result = newBlog(blogData);
@@ -73,6 +93,12 @@ const handleBlogRouter = (request: IncomingMessage, response: ServerResponse): P
       // 更新博客
       if (path === '/api/blog/update') {
         const blogData = (request as any).body
+        const loginCheckResult = loginCheck(request)
+        if (loginCheckResult) {
+          // 未登录
+          return loginCheckResult
+        }
+
         const result = updateBlog(id, blogData);
         return result.then((data) => {
           if (data) {
@@ -85,7 +111,13 @@ const handleBlogRouter = (request: IncomingMessage, response: ServerResponse): P
 
       // 删除博客
       if (path === '/api/blog/delete') {
-        const author = 'lisi' //TODO 假数据，待开发 登录时再改成真实数据
+        const loginCheckResult = loginCheck(request)
+        if (loginCheckResult) {
+          // 未登录
+          return loginCheckResult
+        }
+        const author = (request as any).session.username as string //TODO 假数据，待开发 登录时再改成真实数据
+
         const result = deleteBlog(id, author);
         return result.then((data) => {
           if (data) {

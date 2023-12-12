@@ -37,6 +37,9 @@ const handleUserRouter = (request: IncomingMessage, response: ServerResponse): P
 
             console.log(' request.session is', request.session);
 
+            // 将session存入redis
+            setRedis(request.sessionId, request.session)
+
             // 操作cookie
             // response.setHeader('Set-Cookie', `username=${res.username}; path=/; httpOnly`);
             return new SuccessModel()
