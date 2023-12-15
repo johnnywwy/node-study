@@ -12,8 +12,7 @@ import { IncomingMessage, ServerResponse } from 'http';
 import { parse } from 'querystring';
 
 import { getRedis, setRedis } from './src/db/redis'
-console.log('getRedis', getRedis, setRedis);
-
+import { access } from './utils/log';
 
 const handleBlogRouter = require('./src/router/blog.ts')
 const handleUserRouter = require('./src/router/user.ts')
@@ -54,6 +53,9 @@ const SESSION_DATA: any = {}
 
 const serverHandle = (req: IncomingMessage, res: ServerResponse) => {
     res.setHeader('Content-Type', 'application/json')
+
+    // 记录日志
+    access(`${req.method} -- ${req.url} -- ${req.headers['user-agent']} -- ${Date.now()}`)
 
     // 获取 path
     const url = req.url;
