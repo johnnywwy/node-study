@@ -32,8 +32,3 @@ module.exports = {
     SuccessModel,
     ErrorModel
 }
-
-// exports = {
-//     SuccessModel,
-//     ErrorModel
-// }
