@@ -1,4 +1,4 @@
-import exec from "../db/mysql"
+import { exec, escape } from "../db/mysql"
 import { blogDataDTO } from "../types"
 
 // 获取博客列表

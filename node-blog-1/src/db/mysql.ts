@@ -42,4 +42,9 @@ function exec<T = RowDataPacket[]>(sql: string): Promise<ExecResult<T>> {
   })
 }
 
-export default exec
+const escape = mysql.escape;
+
+export {
+  exec,
+  escape
+};
