@@ -7,8 +7,9 @@ console.log('REDIS_CONF', REDIS_CONF);
 
 const client = redis.createClient(REDIS_CONF)
 
+console.log('client fuvkkkkkkkkkkkkkkkk', client);
 client.on('error', (err) => {
-  console.log('redis error', err)
+  console.log('redis error111111', err)
 })
 
 client.on('connect', () => {
@@ -43,4 +44,4 @@ client.on('connect', () => {
 // }
 
 
-module.exports = client
+module.exports = client;

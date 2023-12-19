@@ -8,7 +8,7 @@ let MYSQL_CONF = {}
 // redis 配置
 let REDIS_CONF = {}
 
-if (env == 'dev') {
+if (env === 'dev') {
   MYSQL_CONF = {
     host: 'localhost',
     user: 'root',
@@ -16,7 +16,10 @@ if (env == 'dev') {
     port: 3306,
     database: 'myblog'
   }
-  REDIS_CONF = 'redis://localhost:6379'
+  REDIS_CONF = {
+    host: 'localhost',
+    port: 6379,
+  }
 }
 
 if (env == 'pro') {
@@ -28,7 +31,10 @@ if (env == 'pro') {
     database: 'myblog'
   }
 
-  REDIS_CONF = 'redis://localhost:6379'
+  REDIS_CONF = {
+    host: 'localhost',
+    port: 6379,
+  }
 
 }
 
