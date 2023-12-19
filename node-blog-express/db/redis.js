@@ -1,6 +1,6 @@
 const redis = require('redis')
 // import { REDIS_CONF } from '../config/db';
-const REDIS_CONF = require('../config/db');
+const { REDIS_CONF } = require('../config/db');
 
 console.log('REDIS_CONF', REDIS_CONF);
 
