@@ -60,6 +60,18 @@ router.post('/new', loginCheck, (req, res, next) => {
   })
 })
 
+/** 更新博客接口 */
+router.post('/update', loginCheck, (req, res, next) => {
+  const result = updateBlog(req.query.id, req.body)
+  return result.then(val => {
+    if (val) {
+      res.json(new SuccessModel())
+    } else {
+      res.json(new ErrorModel('更新博客失败'))
+    }
+  })
+})
+
 
 
 module.exports = router;
