@@ -10,12 +10,29 @@ const {
 const express = require('express');
 const router = express.Router();
 
-/* GET home page. */
-router.get('/list', function (req, res, next) {
+// 中间件
+const loginCheck = require('../middleware/loginCheck')
+
+/** 获取博客详列表 */
+router.get('/list', (req, res, next) => {
   // res.render('index', { title: 'Express' });
 
-  const author = req.query.author || ''
+  let author = req.query.author || ''
   const keyword = req.query.keyword || ''
+
+  console.log('req.query.isadmin', req.query.isadmin);
+  if (req.query.isadmin) {
+    // 管理员页面
+    if (req.session.username == null) {
+      // 未登录
+      res.json(
+        new ErrorModel('未登录')
+      )
+      return
+    }
+    // 强制查询自己的博客
+    author = req.session.username
+  }
 
   const result = getList(author, keyword)
   return result.then(listData => {
@@ -24,5 +41,25 @@ router.get('/list', function (req, res, next) {
 
 
 });
+
+/** 获取博客详情 */
+router.get('/detail', (req, res, next) => {
+  const result = getDetail(req.query.id)
+  return result.then(data => {
+    res.json(new SuccessModel(data))
+  })
+});
+
+/** 新增博客接口 */
+router.post('/new', loginCheck, (req, res, next) => {
+  req.body.author = req.session.username
+
+  const result = newBlog(req.body);
+  return result.then((data) => {
+    res.json(new SuccessModel(data))
+  })
+})
+
+
 
 module.exports = router;
