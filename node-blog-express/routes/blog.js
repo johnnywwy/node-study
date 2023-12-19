@@ -73,5 +73,18 @@ router.post('/update', loginCheck, (req, res, next) => {
 })
 
 
+/** 删除博客接口 */
+router.post('/del', loginCheck, (req, res, next) => {
+  const author = req.session.username
+  const result = deleteBlog(req.query.id, author)
+  return result.then(val => {
+    if (val) {
+      res.json(new SuccessModel())
+    } else {
+      res.json(new ErrorModel('删除博客失败'))
+    }
+  })
+})
+
 
 module.exports = router;
