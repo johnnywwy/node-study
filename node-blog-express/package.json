@@ -7,7 +7,7 @@
     "dev": "nodemon --exec \"set NODE_ENV=dev && node\" ./bin/www"
   },
   "dependencies": {
-    "connect-redis": "7.1.0",
+    "connect-redis": "6.0.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",

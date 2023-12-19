@@ -32,6 +32,7 @@ if (env === 'pro') {
 
 }
 
-export { MYSQL_CONF, REDIS_CONF };
+module.exports = { MYSQL_CONF, REDIS_CONF };
+
 
 
