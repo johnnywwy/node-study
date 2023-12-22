@@ -1,0 +1,6 @@
+# 开发环境
+NODE_ENV=dev
+DATABASE_URL=localhost
+API_KEY=development_api_key
+port=3000
+
